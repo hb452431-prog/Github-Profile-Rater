@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom"
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/Card"
-import { developers, repositories } from "../../data/mockData"
-import { TrendingUp, Users, BookOpen, Star } from "lucide-react"
+import { Card, CardContent } from "../components/ui/Card"
+import { developers, repositories } from "../data/mockData"
+import type { Developer, Repository } from "../data/mockData"
+import { TrendingUp, BookOpen, Star } from "lucide-react"
 
 export default function Home() {
   return (
@@ -31,7 +32,7 @@ export default function Home() {
             <Link to="/rankings" className="text-sm font-medium text-primary hover:underline">View all</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {developers.map((dev, index) => (
+            {developers.map((dev: Developer, index: number) => (
               <Card key={dev.id} className="relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1 h-full bg-primary/20"></div>
                 <CardContent className="p-6">
@@ -64,7 +65,7 @@ export default function Home() {
             <Link to="/trending" className="text-sm font-medium text-primary hover:underline">View all</Link>
           </div>
           <div className="space-y-4">
-            {repositories.map(repo => (
+            {repositories.map((repo: Repository) => (
               <Card key={repo.id}>
                 <CardContent className="p-5">
                   <div className="flex justify-between items-start">

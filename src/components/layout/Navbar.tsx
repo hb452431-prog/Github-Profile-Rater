@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { useTheme } from "../../hooks/useTheme"
-import { Moon, Sun, Github, Search, Menu } from "lucide-react"
+import { Moon, Sun, Search, Menu } from "lucide-react"
+import { GitRankLogo } from "../ui/Icons"
 
 export default function Navbar() {
   const { theme, setTheme } = useTheme()
@@ -10,7 +11,7 @@ export default function Navbar() {
       <div className="container mx-auto flex h-16 items-center px-4 md:px-6">
         <div className="mr-4 hidden md:flex">
           <Link to="/" className="mr-6 flex items-center space-x-2">
-            <Github className="h-6 w-6 text-primary" />
+            <GitRankLogo className="h-6 w-6 text-primary" />
             <span className="hidden font-bold sm:inline-block">GitRank</span>
           </Link>
           <nav className="flex items-center space-x-6 text-sm font-medium">
