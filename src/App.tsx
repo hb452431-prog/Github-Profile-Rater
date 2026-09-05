@@ -16,6 +16,7 @@ import Countries from "./pages/Countries"
 import Organizations from "./pages/Organizations"
 import Dashboard from "./pages/Dashboard"
 import CardView from "./pages/CardView"
+import AnalyzeProfile from "./pages/AnalyzeProfile"
 import Auth from "./pages/Auth"
 
 function GlobalModalHost() {
@@ -37,6 +38,8 @@ function App() {
           <Layout>
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/analyze" element={<AnalyzeProfile />} />
+              <Route path="/analyze/:username" element={<AnalyzeProfile />} />
               <Route path="/rankings" element={<Rankings />} />
               <Route path="/trending" element={<Trending />} />
               <Route path="/compare" element={<Compare />} />

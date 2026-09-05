@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { Search, Package, X } from "lucide-react"
+import { Search, Package, X, Zap, Sparkles } from "lucide-react"
 import { developers, repositories, organizations } from "../../data/mockData"
+import { extractGithubUsername } from "../../services/githubService"
 
 interface SearchModalProps {
   isOpen: boolean
@@ -29,6 +30,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   if (!isOpen) return null
 
   const trimmed = query.trim().toLowerCase()
+  const cleanedHandle = query.trim() ? extractGithubUsername(query.trim()) : ""
 
   const matchedDevs = developers
     .filter((d) => d.name.toLowerCase().includes(trimmed) || d.username.toLowerCase().includes(trimmed))
@@ -47,32 +49,67 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     onClose()
   }
 
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (cleanedHandle) {
+      handleSelect(`/analyze/${cleanedHandle}`)
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-150">
       <div className="relative w-full max-w-xl rounded-2xl bg-card border border-border shadow-2xl overflow-hidden">
         {/* Search Input Bar */}
-        <div className="flex items-center px-4 py-3.5 border-b border-border gap-3">
+        <form onSubmit={handleFormSubmit} className="flex items-center px-4 py-3.5 border-b border-border gap-3">
           <Search className="w-5 h-5 text-muted-foreground" />
           <input
             autoFocus
             type="text"
-            placeholder="Search developers, repos, orgs, or languages..."
+            placeholder="Search developers, repos, orgs, or enter GitHub handle..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full bg-transparent text-foreground placeholder:text-muted-foreground text-sm focus:outline-none"
           />
           {query && (
-            <button onClick={() => setQuery("")} className="text-muted-foreground hover:text-foreground">
+            <button type="button" onClick={() => setQuery("")} className="text-muted-foreground hover:text-foreground">
               <X className="w-4 h-4" />
             </button>
           )}
           <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono font-semibold text-muted-foreground bg-muted border border-border rounded">
             ESC
           </kbd>
-        </div>
+        </form>
 
         {/* Results Container */}
         <div className="max-h-[60vh] overflow-y-auto p-3 space-y-4">
+          {/* Direct Profile Analysis Trigger */}
+          {query.trim().length > 0 && (
+            <div className="p-1">
+              <button
+                onClick={() => handleSelect(`/analyze/${cleanedHandle}`)}
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-primary/10 border border-primary/25 hover:bg-primary/20 transition text-left group"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-primary/20 text-primary flex items-center justify-center">
+                    <Zap className="w-4 h-4 text-amber-400" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-foreground group-hover:text-primary transition flex items-center gap-1.5">
+                      Analyze profile @{cleanedHandle}
+                      <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                    </div>
+                    <span className="text-[10px] text-muted-foreground">
+                      Calculate live rating score, rank card & improvement tips
+                    </span>
+                  </div>
+                </div>
+                <span className="text-xs font-bold text-primary px-2.5 py-1 rounded-lg bg-primary/20">
+                  Analyze →
+                </span>
+              </button>
+            </div>
+          )}
+
           {/* If no query, show quick suggestions */}
           {!query && (
             <div className="space-y-3 p-2">

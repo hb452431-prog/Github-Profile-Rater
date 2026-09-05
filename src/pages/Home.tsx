@@ -11,11 +11,13 @@ import {
   Layers,
   Flame,
   Award,
-  Code2
+  Code2,
+  Zap
 } from "lucide-react"
 import { developers, repositories, platformStats } from "../data/mockData"
 import type { Developer, Repository } from "../data/mockData"
 import { useShareCard } from "../context/ShareCardContext"
+import { extractGithubUsername } from "../services/githubService"
 
 export default function Home() {
   const { openShareCard } = useShareCard()
@@ -25,9 +27,10 @@ export default function Home() {
   const handleHeroSearch = (e: React.FormEvent) => {
     e.preventDefault()
     if (heroSearch.trim()) {
-      navigate(`/rankings?q=${encodeURIComponent(heroSearch.trim())}`)
+      const handle = extractGithubUsername(heroSearch.trim())
+      navigate(`/analyze/${handle}`)
     } else {
-      navigate("/rankings")
+      navigate("/analyze")
     }
   }
 
@@ -39,19 +42,19 @@ export default function Home() {
       {/* 1. HERO SECTION */}
       <section className="container mx-auto px-4 text-center space-y-6 max-w-4xl">
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/25 text-primary text-xs font-bold shadow-xs">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Next-Gen Open Source Intelligence Platform</span>
+          <Zap className="w-3.5 h-3.5 text-amber-400" />
+          <span>Intelligent GitHub Profile Analysis & Rank Cards</span>
         </div>
 
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.1]">
-          Find the developers and projects{" "}
+          Rate your GitHub profile and{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-500 via-sky-500 to-indigo-500 animate-gradient">
-            shaping open source.
+            unlock your rank card.
           </span>
         </h1>
 
         <p className="max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground leading-relaxed">
-          GitRank turns GitHub activity into meaningful rankings, trends and developer insights. Discover the top builders, compare ecosystems, and celebrate code impact.
+          GitRank turns GitHub activity into meaningful rankings, collectible 3D player cards, and personalized improvement tips to accelerate your open-source impact.
         </p>
 
         {/* Hero Interactive Search Box */}
@@ -63,16 +66,16 @@ export default function Home() {
             <Search className="w-5 h-5 text-muted-foreground ml-4 shrink-0" />
             <input
               type="text"
-              placeholder="Search developers, repositories or organizations..."
+              placeholder="Enter GitHub username (e.g. torvalds, antfu, your-handle)..."
               value={heroSearch}
               onChange={(e) => setHeroSearch(e.target.value)}
-              className="w-full py-4 pl-3 pr-24 bg-transparent text-sm focus:outline-none text-foreground placeholder:text-muted-foreground"
+              className="w-full py-4 pl-3 pr-28 bg-transparent text-sm focus:outline-none text-foreground placeholder:text-muted-foreground"
             />
             <button
               type="submit"
-              className="absolute right-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 transition shadow-xs"
+              className="absolute right-2 px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold text-xs hover:bg-primary/90 transition shadow-xs flex items-center gap-1"
             >
-              Explore
+              <Sparkles className="w-3.5 h-3.5" /> Analyze
             </button>
           </div>
         </form>
@@ -80,10 +83,16 @@ export default function Home() {
         {/* Hero CTAs */}
         <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
           <Link
-            to="/rankings"
+            to="/analyze"
             className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md hover:bg-primary/90 transition"
           >
-            Explore Rankings <ArrowRight className="w-4 h-4" />
+            <Zap className="w-4 h-4 text-amber-400" /> Analyze Any Profile
+          </Link>
+          <Link
+            to="/rankings"
+            className="inline-flex items-center justify-center gap-2 py-3 px-6 rounded-xl border border-border bg-card hover:bg-accent text-foreground font-bold text-sm transition"
+          >
+            Explore Leaderboard <ArrowRight className="w-4 h-4" />
           </Link>
           <Link
             to="/trending"

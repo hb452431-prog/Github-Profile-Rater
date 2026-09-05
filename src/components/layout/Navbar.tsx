@@ -13,7 +13,8 @@ import {
   Building2,
   Code2,
   Globe,
-  LayoutDashboard
+  LayoutDashboard,
+  Zap
 } from "lucide-react"
 import { GitRankLogo } from "../ui/Icons"
 import SearchModal from "../features/SearchModal"
@@ -25,6 +26,7 @@ export default function Navbar() {
   const [searchModalOpen, setSearchModalOpen] = useState(false)
 
   const navLinks = [
+    { label: "Analyze", path: "/analyze", icon: Zap },
     { label: "Rankings", path: "/rankings", icon: Trophy },
     { label: "Trending", path: "/trending", icon: Flame },
     { label: "Compare", path: "/compare", icon: GitCompare },
